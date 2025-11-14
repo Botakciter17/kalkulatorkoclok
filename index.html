@@ -67,7 +67,6 @@
         transition: transform .4s ease;
     }
 
-    /* Disco Background */
     @keyframes disco {
         0% { background: red; }
         20% { background: blue; }
@@ -80,7 +79,6 @@
     .disco-mode {
         animation: disco .2s infinite;
     }
-
 </style>
 </head>
 <body>
@@ -119,33 +117,35 @@ let calcBox = document.getElementById("calcBox");
 
 let eqCount = 0;
 
-// tombol input
+// input angka/operator
 function press(value) {
     display.textContent += value;
 }
 
-// tombol "=" ditekan
+// tombol "="
 function equalPress() {
     eqCount++;
 
-    // Batas area dalam calculator
     let boxWidth = calcBox.clientWidth;
     let boxHeight = calcBox.clientHeight;
 
-    // posisi maksimum biar tidak keluar
-    let maxX = boxWidth - 150;
+    let maxX = boxWidth - 150; 
     let maxY = boxHeight - 250;
 
     if (eqCount === 1) {
+        // GERAK 1 → kiri
         equalsBtn.style.transform = `translate(-${maxX}px, 0px)`;
     }
     else if (eqCount === 2) {
-        equalsBtn.style.transform = `translate(${maxX}px, 0px)`;
+        // GERAK 2 → kembali ke posisi asli
+        equalsBtn.style.transform = `translate(0px, 0px)`;
     }
     else if (eqCount === 3) {
+        // GERAK 3 → atas
         equalsBtn.style.transform = `translate(0px, -${maxY}px)`;
     }
     else if (eqCount === 4) {
+        // TAMPILKAN TEKS
         display.textContent = "eh bentar berapa ya hasil nya? coba tekan hasil lagi";
     }
     else if (eqCount === 5) {
@@ -163,7 +163,7 @@ function startDiscoAndCalculate() {
             let result = eval(display.textContent);
             alert("Hasilnya adalah: " + result);
         } catch {
-            alert("Error bos, inputnya salah");
+            alert("Waduh input salah bos 😆");
         }
 
         eqCount = 0;
