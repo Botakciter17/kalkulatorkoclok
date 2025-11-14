@@ -1,223 +1,174 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Kalkulator Disco</title>
 <style>
     body {
-        margin: 0;
-        height: 100vh;
+        background: #111;
         display: flex;
-        align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #2e2e2e, #1a1a1a);
-        font-family: 'Poppins', sans-serif;
-        overflow: hidden;
-        padding: 20px;
-        transition: background 0.3s linear;
-    }
-
-    #msg {
-        position: absolute;
-        top: 15px;
-        color: #ff5757;
-        font-size: 4vw;
-        font-weight: 700;
-        text-align: center;
-        width: 100%;
-        text-shadow: 0 0 10px #ff0000;
-        pointer-events: none;
-    }
-
-    #calc {
-        position: relative;
-        width: 100%;
-        max-width: 380px;
-        padding: 20px;
-        border-radius: 25px;
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(18px);
-        box-shadow: 0 0 25px rgba(0,0,0,0.4);
-        transition: transform 0.3s;
-    }
-
-    #display {
-        width: 100%;
-        height: 16vw;
-        max-height: 75px;
-        border: none;
-        border-radius: 15px;
-        background: rgba(255,255,255,0.18);
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Poppins, sans-serif;
         color: white;
-        font-size: 7vw;
-        max-font-size: 34px;
-        padding: 10px 15px;
-        text-align: right;
-        font-weight: 600;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
     }
 
-    #buttons {
-        margin-top: 20px;
+    .calculator {
+        width: 90vw;
+        max-width: 380px;
+        background: #1a1a1a;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 30px rgba(255,255,255,0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .display {
+        height: 70px;
+        background: #000;
+        color: #0f0;
+        font-size: 28px;
+        text-align: right;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+
+    .buttons {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 12px;
     }
 
     button {
-        height: 15vw;
-        max-height: 70px;
+        padding: 15px;
+        font-size: 22px;
+        border-radius: 12px;
         border: none;
-        border-radius: 16px;
-        font-size: 6vw;
-        max-font-size: 24px;
-        font-weight: 600;
-        cursor: pointer;
-        background: rgba(255,255,255,0.22);
+        background: #333;
         color: white;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        transition: transform 0.25s, background 0.25s;
-    }
-
-    button:hover {
-        transform: scale(1.1);
+        transition: .2s;
     }
 
     button:active {
-        transform: scale(0.88);
-        box-shadow: none;
+        transform: scale(0.9);
     }
 
-    #resultBtn {
-        background: #00d5ff;
-        font-weight: 700;
+    #equals {
+        background: #e91e63;
+        position: relative;
+        transition: transform .4s ease;
     }
 
-    @keyframes crazySpin {
-        from { transform: rotate(0deg); }
-        to   { transform: rotate(3600deg); }
+    /* Disco Background */
+    @keyframes disco {
+        0% { background: red; }
+        20% { background: blue; }
+        40% { background: green; }
+        60% { background: yellow; }
+        80% { background: purple; }
+        100% { background: red; }
     }
 
-    @media (max-width: 500px) {
-        #msg { font-size: 5vw; }
-        button { font-size: 7vw; }
-        #display { font-size: 8vw; }
+    .disco-mode {
+        animation: disco .2s infinite;
     }
+
 </style>
 </head>
 <body>
 
-<div id="msg"></div>
+<div class="calculator" id="calcBox">
+    <div class="display" id="display"></div>
 
-<div id="calc">
-    <input id="display" readonly>
-
-    <div id="buttons">
-        <button onclick="press('1')">1</button>
-        <button onclick="press('2')">2</button>
-        <button onclick="press('3')">3</button>
-        <button onclick="press('+')" style="background:#ff7b00;">+</button>
+    <div class="buttons">
+        <button onclick="press('7')">7</button>
+        <button onclick="press('8')">8</button>
+        <button onclick="press('9')">9</button>
+        <button onclick="press('/')">÷</button>
 
         <button onclick="press('4')">4</button>
         <button onclick="press('5')">5</button>
         <button onclick="press('6')">6</button>
-        <button onclick="press('-')" style="background:#ff7b00;">−</button>
+        <button onclick="press('*')">×</button>
 
-        <button onclick="press('7')">7</button>
-        <button onclick="press('8')">8</button>
-        <button onclick="press('9')">9</button>
-        <button onclick="press('*')" style="background:#ff7b00;">×</button>
+        <button onclick="press('1')">1</button>
+        <button onclick="press('2')">2</button>
+        <button onclick="press('3')">3</button>
+        <button onclick="press('-')">−</button>
 
         <button onclick="press('0')">0</button>
-        <button onclick="press('/')">/</button>
-        <button id="resultBtn" onclick="hasil()">=</button>
-        <button onclick="display.value=''">C</button>
+        <button onclick="press('.')">.</button>
+        <button onclick="press('+')">+</button>
+
+        <button id="equals" onclick="equalPress()">=</button>
     </div>
 </div>
 
 <script>
-let pressCount = 0;
+let display = document.getElementById("display");
+let equalsBtn = document.getElementById("equals");
+let calcBox = document.getElementById("calcBox");
 
-function press(v) {
-    display.value += v;
+let eqCount = 0;
+
+// tombol input
+function press(value) {
+    display.textContent += value;
 }
 
-function randomColor() {
-    return "#" + Math.floor(Math.random()*16777215).toString(16);
+// tombol "=" ditekan
+function equalPress() {
+    eqCount++;
+
+    // Batas area dalam calculator
+    let boxWidth = calcBox.clientWidth;
+    let boxHeight = calcBox.clientHeight;
+
+    // posisi maksimum biar tidak keluar
+    let maxX = boxWidth - 150;
+    let maxY = boxHeight - 250;
+
+    if (eqCount === 1) {
+        equalsBtn.style.transform = `translate(-${maxX}px, 0px)`;
+    }
+    else if (eqCount === 2) {
+        equalsBtn.style.transform = `translate(${maxX}px, 0px)`;
+    }
+    else if (eqCount === 3) {
+        equalsBtn.style.transform = `translate(0px, -${maxY}px)`;
+    }
+    else if (eqCount === 4) {
+        display.textContent = "eh bentar berapa ya hasil nya? coba tekan hasil lagi";
+    }
+    else if (eqCount === 5) {
+        startDiscoAndCalculate();
+    }
 }
 
-function hasil() {
-    pressCount++;
-    
-    const btn = document.getElementById("resultBtn");
-    const calc = document.getElementById("calc");
-    const msg = document.getElementById("msg");
+function startDiscoAndCalculate() {
+    document.body.classList.add("disco-mode");
 
-    msg.innerHTML = "";
+    setTimeout(() => {
+        document.body.classList.remove("disco-mode");
 
-    const rect = calc.getBoundingClientRect();
-    const maxX = rect.width - 80;  // kanan
-    const maxY = rect.height - 90; // bawah
+        try {
+            let result = eval(display.textContent);
+            alert("Hasilnya adalah: " + result);
+        } catch {
+            alert("Error bos, inputnya salah");
+        }
 
-    btn.style.position = "absolute";
-
-    // === 1 === lompat jauh kiri
-    if (pressCount === 1) {
-        btn.style.left = "10px";
-        btn.style.top = maxY + "px";
-        btn.style.transform = "none";
-        return;
-    }
-
-    // === 2 === lompat jauh kanan
-    if (pressCount === 2) {
-        btn.style.left = maxX + "px";
-        btn.style.top = maxY + "px";
-        btn.style.transform = "none";
-        return;
-    }
-
-    // === 3 === lompat jauh atas
-    if (pressCount === 3) {
-        btn.style.left = "50%";
-        btn.style.top = "10px";
-        btn.style.transform = "translateX(-50%)";
-        return;
-    }
-
-    // === 4 === munculkan teks
-    if (pressCount === 4) {
-        msg.innerHTML = "eh bentar berapa ya hasil nya? coba tekan hasil lagi";
-        return;
-    }
-
-    // === 5 === disco + spinning + alert hasil
-    if (pressCount === 5) {
-
-        // DISCO BG
-        let disco = setInterval(() => {
-            document.body.style.background = randomColor();
-        }, 120);
-
-        // MUTER
-        calc.style.animation = "crazySpin 2s linear";
-
-        setTimeout(() => {
-            clearInterval(disco);
-
-            // reset background
-            document.body.style.background = "linear-gradient(135deg,#2e2e2e,#1a1a1a)";
-            calc.style.animation = "";
-
-            let result = "Error";
-            try {
-                result = eval(display.value);
-            } catch (e) {}
-
-            alert("Hasil: " + result);
-        }, 2000);
-    }
+        eqCount = 0;
+        equalsBtn.style.transform = "translate(0,0)";
+    }, 2000);
 }
 </script>
 
