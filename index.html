@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #2e2e2e, #1a1a1a);
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+        transition: background 0.2s;
+    }
+
+    #msg {
+        position: absolute;
+        top: 20px;
+        color: #ff5e5e;
+        font-size: 18px;
+        font-weight: 600;
+        text-shadow: 0 0 8px #ff0000;
+    }
+
+    #calc {
+        width: 330px;
+        padding: 25px;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s;
+    }
+
+    #display {
+        width: 100%;
+        height: 70px;
+        font-size: 32px;
+        text-align: right;
+        padding: 10px 15px;
+        border-radius: 15px;
+        border: none;
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        font-weight: 600;
+        box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+    }
+
+    #buttons {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    button {
+        height: 70px;
+        border: none;
+        border-radius: 16px;
+        font-size: 22px;
+        font-weight: 600;
+        cursor: pointer;
+        background: rgba(255,255,255,0.2);
+        color: white;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        transition: 0.25s;
+    }
+
+    button:hover {
+        transform: scale(1.13);
+        background: rgba(255,255,255,0.3);
+    }
+
+    button:active {
+        transform: scale(0.95);
+        box-shadow: none;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(3600deg); }
+    }
+</style>
+</head>
+<body>
+
+<div id="msg"></div>
+
+<div id="calc">
+    <input id="display" readonly>
+
+    <div id="buttons">
+        <button onclick="press('1')">1</button>
+        <button onclick="press('2')">2</button>
+        <button onclick="press('3')">3</button>
+        <button onclick="press('+')" style="background:#ff7b00;">+</button>
+
+        <button onclick="press('4')">4</button>
+        <button onclick="press('5')">5</button>
+        <button onclick="press('6')">6</button>
+        <button onclick="press('-')" style="background:#ff7b00;">-</button>
+
+        <button onclick="press('7')">7</button>
+        <button onclick="press('8')">8</button>
+        <button onclick="press('9')">9</button>
+        <button onclick="press('*')" style="background:#ff7b00;">×</button>
+
+        <button onclick="press('0')">0</button>
+        <button onclick="press('/')">/</button>
+        <button id="resultBtn" onclick="hasil()" style="background:#00d5ff;font-weight:700;">=</button>
+        <button onclick="display.value=''">C</button>
+    </div>
+</div>
+
+<script>
+let pressCount = 0;
+
+function press(v) {
+    display.value += v;
+}
+
+function randomColor() {
+    return "#" + Math.floor(Math.random()*16777215).toString(16);
+}
+
+function hasil() {
+    pressCount++;
+    let btn = document.getElementById("resultBtn");
+    let calc = document.getElementById("calc");
+    let msg = document.getElementById("msg");
+
+    msg.innerHTML = "";
+
+    // 1: lompat kiri
+    if (pressCount === 1) {
+        btn.style.transform = "translateX(-300px)";
+        return;
+    }
+
+    // 2: lompat kanan
+    if (pressCount === 2) {
+        btn.style.transform = "translateX(300px)";
+        return;
+    }
+
+    // 3: lompat atas
+    if (pressCount === 3) {
+        btn.style.transform = "translateY(-220px)";
+        return;
+    }
+
+    // 4: munculkan teks lucu
+    if (pressCount === 4) {
+        msg.innerHTML = "eh bentar berapa ya hasil nya? coba tekan hasil lagi";
+        return;
+    }
+
+    // 5: mulainya disco + spinning
+    if (pressCount === 5) {
+        let disco = setInterval(() => {
+            document.body.style.background = randomColor();
+        }, 120);
+
+        calc.style.animation = "spin 2s linear";
+
+        setTimeout(() => {
+            clearInterval(disco);
+            document.body.style.background = "linear-gradient(135deg,#2e2e2e,#1a1a1a)";
+            calc.style.animation = "";
+
+            let result;
+            try {
+                result = eval(display.value);
+            } catch {
+                result = "Error";
+            }
+
+            alert("Hasil: " + result);
+
+        }, 2000);
+    }
+}
+</script>
+
+</body>
+</html>
