@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,29 +13,31 @@
         background: linear-gradient(135deg, #2e2e2e, #1a1a1a);
         font-family: 'Poppins', sans-serif;
         overflow: hidden;
-        transition: background 0.2s;
         padding: 20px;
+        transition: background 0.3s linear;
     }
 
     #msg {
         position: absolute;
-        top: 20px;
-        color: #ff5e5e;
+        top: 15px;
+        color: #ff5757;
         font-size: 4vw;
-        max-width: 90%;
+        font-weight: 700;
         text-align: center;
-        font-weight: 600;
-        text-shadow: 0 0 8px #ff0000;
+        width: 100%;
+        text-shadow: 0 0 10px #ff0000;
+        pointer-events: none;
     }
 
     #calc {
+        position: relative;
         width: 100%;
         max-width: 380px;
         padding: 20px;
         border-radius: 25px;
         background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(20px);
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 0 25px rgba(0,0,0,0.4);
         transition: transform 0.3s;
     }
 
@@ -43,17 +45,16 @@
         width: 100%;
         height: 16vw;
         max-height: 75px;
+        border: none;
+        border-radius: 15px;
+        background: rgba(255,255,255,0.18);
+        color: white;
         font-size: 7vw;
         max-font-size: 34px;
-        text-align: right;
         padding: 10px 15px;
-        border-radius: 15px;
-        border: none;
-        outline: none;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
+        text-align: right;
         font-weight: 600;
-        box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
     }
 
     #buttons {
@@ -72,16 +73,15 @@
         max-font-size: 24px;
         font-weight: 600;
         cursor: pointer;
-        background: rgba(255,255,255,0.25);
+        background: rgba(255,255,255,0.22);
         color: white;
         backdrop-filter: blur(10px);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        transition: 0.25s;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transition: transform 0.25s, background 0.25s;
     }
 
     button:hover {
         transform: scale(1.1);
-        background: rgba(255,255,255,0.35);
     }
 
     button:active {
@@ -89,18 +89,21 @@
         box-shadow: none;
     }
 
-    @keyframes spin {
+    #resultBtn {
+        background: #00d5ff;
+        font-weight: 700;
+    }
+
+    @keyframes crazySpin {
         from { transform: rotate(0deg); }
         to   { transform: rotate(3600deg); }
     }
 
-    /* --- RESPONSIVE FIXES --- */
     @media (max-width: 500px) {
         #msg { font-size: 5vw; }
         button { font-size: 7vw; }
         #display { font-size: 8vw; }
     }
-
 </style>
 </head>
 <body>
@@ -119,7 +122,7 @@
         <button onclick="press('4')">4</button>
         <button onclick="press('5')">5</button>
         <button onclick="press('6')">6</button>
-        <button onclick="press('-')" style="background:#ff7b00;">-</button>
+        <button onclick="press('-')" style="background:#ff7b00;">−</button>
 
         <button onclick="press('7')">7</button>
         <button onclick="press('8')">8</button>
@@ -128,7 +131,7 @@
 
         <button onclick="press('0')">0</button>
         <button onclick="press('/')">/</button>
-        <button id="resultBtn" onclick="hasil()" style="background:#00d5ff;font-weight:700;">=</button>
+        <button id="resultBtn" onclick="hasil()">=</button>
         <button onclick="display.value=''">C</button>
     </div>
 </div>
@@ -146,58 +149,73 @@ function randomColor() {
 
 function hasil() {
     pressCount++;
-    let btn = document.getElementById("resultBtn");
-    let calc = document.getElementById("calc");
-    let msg = document.getElementById("msg");
+    
+    const btn = document.getElementById("resultBtn");
+    const calc = document.getElementById("calc");
+    const msg = document.getElementById("msg");
 
     msg.innerHTML = "";
 
-    // 1: lompat kiri
+    const rect = calc.getBoundingClientRect();
+    const maxX = rect.width - 80;  // kanan
+    const maxY = rect.height - 90; // bawah
+
+    btn.style.position = "absolute";
+
+    // === 1 === lompat jauh kiri
     if (pressCount === 1) {
-        btn.style.transform = "translateX(-50vw)";
+        btn.style.left = "10px";
+        btn.style.top = maxY + "px";
+        btn.style.transform = "none";
         return;
     }
 
-    // 2: lompat kanan
+    // === 2 === lompat jauh kanan
     if (pressCount === 2) {
-        btn.style.transform = "translateX(50vw)";
+        btn.style.left = maxX + "px";
+        btn.style.top = maxY + "px";
+        btn.style.transform = "none";
         return;
     }
 
-    // 3: lompat atas
+    // === 3 === lompat jauh atas
     if (pressCount === 3) {
-        btn.style.transform = "translateY(-40vw)";
+        btn.style.left = "50%";
+        btn.style.top = "10px";
+        btn.style.transform = "translateX(-50%)";
         return;
     }
 
-    // 4: munculkan kalimat lucu
+    // === 4 === munculkan teks
     if (pressCount === 4) {
         msg.innerHTML = "eh bentar berapa ya hasil nya? coba tekan hasil lagi";
         return;
     }
 
-    // 5: disco + spinning
+    // === 5 === disco + spinning + alert hasil
     if (pressCount === 5) {
+
+        // DISCO BG
         let disco = setInterval(() => {
             document.body.style.background = randomColor();
         }, 120);
 
-        calc.style.animation = "spin 2s linear";
+        // MUTER
+        calc.style.animation = "crazySpin 2s linear";
 
         setTimeout(() => {
             clearInterval(disco);
+
+            // reset background
             document.body.style.background = "linear-gradient(135deg,#2e2e2e,#1a1a1a)";
             calc.style.animation = "";
 
-            let result;
+            let result = "Error";
             try {
                 result = eval(display.value);
-            } catch {
-                result = "Error";
-            }
+            } catch (e) {}
 
             alert("Hasil: " + result);
-
         }, 2000);
     }
 }
