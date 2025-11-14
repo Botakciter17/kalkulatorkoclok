@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
     body {
         margin: 0;
@@ -12,22 +14,26 @@
         font-family: 'Poppins', sans-serif;
         overflow: hidden;
         transition: background 0.2s;
+        padding: 20px;
     }
 
     #msg {
         position: absolute;
         top: 20px;
         color: #ff5e5e;
-        font-size: 18px;
+        font-size: 4vw;
+        max-width: 90%;
+        text-align: center;
         font-weight: 600;
         text-shadow: 0 0 8px #ff0000;
     }
 
     #calc {
-        width: 330px;
-        padding: 25px;
+        width: 100%;
+        max-width: 380px;
+        padding: 20px;
         border-radius: 25px;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.12);
         backdrop-filter: blur(20px);
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
         transition: transform 0.3s;
@@ -35,8 +41,10 @@
 
     #display {
         width: 100%;
-        height: 70px;
-        font-size: 32px;
+        height: 16vw;
+        max-height: 75px;
+        font-size: 7vw;
+        max-font-size: 34px;
         text-align: right;
         padding: 10px 15px;
         border-radius: 15px;
@@ -52,17 +60,19 @@
         margin-top: 20px;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
+        gap: 12px;
     }
 
     button {
-        height: 70px;
+        height: 15vw;
+        max-height: 70px;
         border: none;
         border-radius: 16px;
-        font-size: 22px;
+        font-size: 6vw;
+        max-font-size: 24px;
         font-weight: 600;
         cursor: pointer;
-        background: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.25);
         color: white;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -70,12 +80,12 @@
     }
 
     button:hover {
-        transform: scale(1.13);
-        background: rgba(255,255,255,0.3);
+        transform: scale(1.1);
+        background: rgba(255,255,255,0.35);
     }
 
     button:active {
-        transform: scale(0.95);
+        transform: scale(0.88);
         box-shadow: none;
     }
 
@@ -83,6 +93,14 @@
         from { transform: rotate(0deg); }
         to   { transform: rotate(3600deg); }
     }
+
+    /* --- RESPONSIVE FIXES --- */
+    @media (max-width: 500px) {
+        #msg { font-size: 5vw; }
+        button { font-size: 7vw; }
+        #display { font-size: 8vw; }
+    }
+
 </style>
 </head>
 <body>
@@ -136,29 +154,29 @@ function hasil() {
 
     // 1: lompat kiri
     if (pressCount === 1) {
-        btn.style.transform = "translateX(-300px)";
+        btn.style.transform = "translateX(-50vw)";
         return;
     }
 
     // 2: lompat kanan
     if (pressCount === 2) {
-        btn.style.transform = "translateX(300px)";
+        btn.style.transform = "translateX(50vw)";
         return;
     }
 
     // 3: lompat atas
     if (pressCount === 3) {
-        btn.style.transform = "translateY(-220px)";
+        btn.style.transform = "translateY(-40vw)";
         return;
     }
 
-    // 4: munculkan teks lucu
+    // 4: munculkan kalimat lucu
     if (pressCount === 4) {
         msg.innerHTML = "eh bentar berapa ya hasil nya? coba tekan hasil lagi";
         return;
     }
 
-    // 5: mulainya disco + spinning
+    // 5: disco + spinning
     if (pressCount === 5) {
         let disco = setInterval(() => {
             document.body.style.background = randomColor();
