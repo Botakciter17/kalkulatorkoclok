@@ -129,6 +129,8 @@ let equalsBtn = document.getElementById("equals");
 let calcBox = document.getElementById("calcBox");
 
 let eqCount = 0;
+// buat nyimpen ekspresi asli sebelum display diisi teks bercanda
+let lastExpression = "";
 
 // input angka/operator
 function press(value) {
@@ -158,6 +160,8 @@ function equalPress() {
         equalsBtn.style.transform = `translate(0px, -${maxY}px)`;
     }
     else if (eqCount === 4) {
+        // SIMPAN EKSPRESI SEBELUM DIUBAH JADI TEKS
+        lastExpression = display.textContent;
         // TAMPILKAN TEKS
         display.textContent = "eh bentar berapa ya hasil nya? coba tekan hasil lagi";
     }
@@ -175,13 +179,21 @@ function startDiscoAndCalculate() {
         document.body.classList.remove("disco-mode");
 
         try {
-            let result = eval(display.textContent);
+            // kalau lastExpression kosong (misal user lom input apa2),
+            // fallback ke display.textContent
+            let expression = lastExpression || display.textContent;
+            let result = eval(expression);
+
             alert("Hasilnya adalah: " + result);
+            // boleh juga tampilkan hasil di display
+            display.textContent = result;
         } catch {
             alert("Waduh input salah bos 😆");
         }
 
+        // reset
         eqCount = 0;
+        lastExpression = "";
         equalsBtn.style.transform = "translate(0,0)";
     }, 2000); // 2 detik muter dulu baru alert
 }
