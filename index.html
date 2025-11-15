@@ -25,6 +25,8 @@
         box-shadow: 0 0 30px rgba(255,255,255,0.1);
         position: relative;
         overflow: hidden;
+        /* BIAR TITIK PUTAR DI TENGAH */
+        transform-origin: center center;
     }
 
     .display {
@@ -76,8 +78,19 @@
         100% { background: red; }
     }
 
+    /* ANIMASI MUTER */
+    @keyframes spin {
+        0%   { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     .disco-mode {
         animation: disco .2s infinite;
+    }
+
+    /* SAAT BODY PUNYA CLASS disco-mode, KALKULATORNYA IKUT MUTER */
+    body.disco-mode .calculator {
+        animation: spin .6s linear infinite;
     }
 </style>
 </head>
@@ -154,9 +167,11 @@ function equalPress() {
 }
 
 function startDiscoAndCalculate() {
+    // aktifkan disco + spin
     document.body.classList.add("disco-mode");
 
     setTimeout(() => {
+        // stop disco + spin
         document.body.classList.remove("disco-mode");
 
         try {
@@ -168,7 +183,7 @@ function startDiscoAndCalculate() {
 
         eqCount = 0;
         equalsBtn.style.transform = "translate(0,0)";
-    }, 2000);
+    }, 2000); // 2 detik muter dulu baru alert
 }
 </script>
 
